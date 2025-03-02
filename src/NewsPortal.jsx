@@ -23,7 +23,7 @@ const NewsPortal = () => {
       let endpoint = `https://newsapi.org/v2/everything?q=india&apiKey=${apiKey}`;
       
       if (category !== 'headlines') {
-        endpoint = `https://newsapi.org/v2/top-headlines?category=${category}&country=in&apiKey=${apiKey}`;
+        endpoint = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${apiKey}`;
       }
 
       console.log("Fetching:", endpoint);

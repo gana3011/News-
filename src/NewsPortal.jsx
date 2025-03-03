@@ -27,8 +27,6 @@ const NewsPortal = () => {
         endpoint = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${apiKey}`;
       }
 
-      console.log("Fetching:", endpoint);
-
       const response = await axios.get(endpoint);
       if (response.status !== 200) throw new Error('Failed to fetch news');
 
@@ -49,7 +47,6 @@ const NewsPortal = () => {
 
       setLoading(false);
     } catch (err) {
-      console.error('Error fetching news:', err);
       setError(err.message);
       setLoading(false);
     }
@@ -61,8 +58,7 @@ const NewsPortal = () => {
     }
   }, [activeSection]);
 
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString('en-IN', {
+  const today = new Date().toLocaleDateString('en-IN', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -73,58 +69,38 @@ const NewsPortal = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#ffffff] w-full">
-      {/* Header */}
-      <header className="bg-[#071013] shadow-md w-full px-4 py-4 sm:px-6">
-        <div className="flex justify-between items-center w-full">
-          <div className="flex items-center">
-            <h1 className="text-3xl font-bold text-[#ffff]">C-Times</h1>
-          </div>
-          <span className="text-sm text-[#E9E9E9]">{formattedDate}</span>
-        </div>
+    <div className="flex flex-col min-h-screen bg-gray-100 text-black font-serif">
+      <header className="bg-white text-black border-b-2 border-black py-4 text-center">
+        <h1 className="text-5xl font-bold uppercase tracking-widest chomsky-font">C-Times</h1>
+        <p className="text-lg italic chomsky-font">{today}</p>
       </header>
 
-      {/* Navigation */}
-      <nav className="bg-[#071013] text-white sticky top-0 z-10 w-full">
-        <div className="flex space-x-1 overflow-x-auto py-3 scrollbar-hide px-4">
-          {sections.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => setActiveSection(section.id)}
-              className={`px-4 py-2 font-medium rounded-md whitespace-nowrap transition-colors ${
-                activeSection === section.id 
-                  ? 'bg-white text-[#071013]' 
-                  : 'hover:bg-[e9e9e9]'
-              }`}
-            >
-              {section.name}
-            </button>
-          ))}
-        </div>
+      <nav className="bg-white border-b border-black py-2 flex justify-center space-x-4">
+        {sections.map((section) => (
+          <button
+            key={section.id}
+            onClick={() => setActiveSection(section.id)}
+            className={`px-4 py-2 font-bold uppercase border-b-2 transition-all ${
+              activeSection === section.id ? 'border-black' : 'border-transparent hover:border-gray-500'
+            }`}
+          >
+            {section.name}
+          </button>
+        ))}
       </nav>
 
-      {/* Main Content */}
-      <main className="flex-grow w-full px-4 py-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">
-            {sections.find(s => s.id === activeSection)?.name} Today
-          </h2>
-          <FiRefreshCcw className='cursor-pointer' onClick={refreshNews} color='#232323' size={30} />
+      <main className="flex-grow p-6 max-w-full mx-auto">
+        <div className="flex justify-between items-center border-b pb-3">
+          <h2 className="text-3xl font-bold uppercase">{sections.find(s => s.id === activeSection)?.name} Today</h2>
+          <FiRefreshCcw className='cursor-pointer' onClick={refreshNews} size={30} />
         </div>
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-            <p>Error loading news: {error}</p>
-          </div>
-        )}
+        {error && <p className="text-red-600 mt-4">Error loading news: {error}</p>}
 
         {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#071013]"></div>
-            <span className="ml-3 text-lg text-gray-700">Loading latest news...</span>
-          </div>
+          <p className="text-center py-10 text-lg">Loading latest news...</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             {news[activeSection]?.length > 0 ? (
               news[activeSection].map((article) => (
                 <a 
@@ -132,45 +108,28 @@ const NewsPortal = () => {
                   href={article.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                  className="glass block rounded-xl p-4 shadow-lg border border-gray-500 hover:shadow-xl transition-all"
                 >
                   <img 
                     src={article.image} 
                     alt={article.title} 
-                    className="w-full h-48 object-cover"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/api/placeholder/300/200';
-                    }}
+                    className="w-full h-48 object-cover mb-3"
+                    onError={(e) => { e.target.onerror = null; e.target.src = '/api/placeholder/300/200'; }}
                   />
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{article.title}</h3>
-                    <p className="text-gray-600 mb-3 text-sm">{article.snippet}</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-medium text-red-700">{article.source}</span>
-                      <span className="text-xs text-gray-500">
-                        {new Date(article.publishedAt).toLocaleTimeString('en-IN', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          hour12: true
-                        })}
-                      </span>
-                    </div>
-                  </div>
+                  <h3 className="text-xl font-bold mb-2 leading-tight">{article.title}</h3>
+                  <p className="text-gray-700 text-sm mb-2">{article.snippet}</p>
+                  <p className="text-xs font-bold uppercase text-gray-600">{article.source}</p>
                 </a>
               ))
             ) : (
-              <div className="col-span-3 text-center py-10">
-                <p className="text-gray-500">No news articles available for this category.</p>
-              </div>
+              <p className="text-center col-span-2 py-10">No news articles available.</p>
             )}
           </div>
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#071013] text-white py-6 w-full text-center">
-        <p className="text-sm text-gray-400">© {new Date().getFullYear()} C-Times. All rights reserved.</p>
+      <footer className="bg-white border-t border-black py-4 text-center text-xs uppercase">
+        <p>&copy; {new Date().getFullYear()} C-Times. All rights reserved.</p>
       </footer>
     </div>
   );

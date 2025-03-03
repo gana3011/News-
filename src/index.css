@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden;
+@font-face {
+  font-family: 'Chomsky';
+  src: url('/fonts/Chomsky.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
+
+.chomsky-font {
+  font-family: 'Chomsky', serif;
+}
+

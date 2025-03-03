@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FiRefreshCcw } from "react-icons/fi";
 
 const NewsPortal = () => {
   const [activeSection, setActiveSection] = useState('headlines');
@@ -72,20 +73,19 @@ const NewsPortal = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 w-full">
+    <div className="flex flex-col min-h-screen bg-[#ffffff] w-full">
       {/* Header */}
-      <header className="bg-white shadow-md w-full px-4 py-4 sm:px-6">
+      <header className="bg-[#071013] shadow-md w-full px-4 py-4 sm:px-6">
         <div className="flex justify-between items-center w-full">
           <div className="flex items-center">
-            <h1 className="text-3xl font-bold text-red-700">Bharat News</h1>
-            <p className="text-gray-500 ml-2 hidden md:block">India's Premier News Portal</p>
+            <h1 className="text-3xl font-bold text-[#ffff]">C-Times</h1>
           </div>
-          <span className="text-sm text-gray-600">{formattedDate}</span>
+          <span className="text-sm text-[#E9E9E9]">{formattedDate}</span>
         </div>
       </header>
 
       {/* Navigation */}
-      <nav className="bg-red-700 text-white sticky top-0 z-10 w-full">
+      <nav className="bg-[#071013] text-white sticky top-0 z-10 w-full">
         <div className="flex space-x-1 overflow-x-auto py-3 scrollbar-hide px-4">
           {sections.map((section) => (
             <button
@@ -93,8 +93,8 @@ const NewsPortal = () => {
               onClick={() => setActiveSection(section.id)}
               className={`px-4 py-2 font-medium rounded-md whitespace-nowrap transition-colors ${
                 activeSection === section.id 
-                  ? 'bg-white text-red-700' 
-                  : 'hover:bg-red-600'
+                  ? 'bg-white text-[#071013]' 
+                  : 'hover:bg-[e9e9e9]'
               }`}
             >
               {section.name}
@@ -109,12 +109,7 @@ const NewsPortal = () => {
           <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">
             {sections.find(s => s.id === activeSection)?.name} Today
           </h2>
-          <button 
-            onClick={refreshNews}
-            className="px-4 py-2 bg-red-700 text-white rounded-md hover:bg-red-600 transition-colors flex items-center"
-          >
-            Refresh
-          </button>
+          <FiRefreshCcw className='cursor-pointer' onClick={refreshNews} color='#232323' size={30} />
         </div>
 
         {error && (
@@ -125,7 +120,7 @@ const NewsPortal = () => {
 
         {loading ? (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-700"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#071013]"></div>
             <span className="ml-3 text-lg text-gray-700">Loading latest news...</span>
           </div>
         ) : (
@@ -174,8 +169,8 @@ const NewsPortal = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-6 w-full text-center">
-        <p className="text-sm text-gray-400">© {new Date().getFullYear()} Bharat News. All rights reserved.</p>
+      <footer className="bg-[#071013] text-white py-6 w-full text-center">
+        <p className="text-sm text-gray-400">© {new Date().getFullYear()} C-Times. All rights reserved.</p>
       </footer>
     </div>
   );
